@@ -12,6 +12,23 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Santiago Del Rio",
+  "contributors": [
+    {
+      "name": "Weston Wood"
+    },
+    {
+      "name": "Angel I. Gutierrez Sanjuan"
+    },
+    {
+      "name": "Antonio J. Ortega"
+    },
+    {
+      "name": "James San"
+    },
+    {
+      "name": "Micheal Hareu"
+    }
+  ],
   "license": "ISC"
 }

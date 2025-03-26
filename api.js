@@ -20,7 +20,7 @@ const getDataByKeyword = async (keyword) => {
 const getDataByKeywordAndSlug = async (keyword, slug) => {
   try {
     const res = await axios.get(
-      `${BASE_URL}${endpoints[keyword]}?slug=${slug}`
+      `${BASE_URL}${endpoints[keyword]}${slug}/`
     );
     return res.data;
   } catch (error) {

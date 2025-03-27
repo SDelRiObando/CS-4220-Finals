@@ -1,3 +1,6 @@
+import { getDataByKeyword, getDataByKeywordAndSlug} from './api.js';
+//import getDataByKeywordAndSlug from './api.js';
+
 /**
  * Searches the selected API using the provided keyword.
  * Saves the keyword to search_history_keyword.json if it is unique.
@@ -7,9 +10,32 @@
  *
  * @param {string} keyword - The keyword to search for in the selected API.
  */
-const search = async (keyword) => { 
-    // Implement search functionality here
-  };
+
+const searchK = async (keyword) => { 
+  getDataByKeyword(keyword)
+    .then((results) => {
+      console.log("API Results:", results);  // prints data founf from call 
+    })
+    .catch((error) => {
+      console.error("Error during search:", error); // errors
+    });
+};
+
+const searchKS = async (keyword, Slug) => { 
+  getDataByKeywordAndSlug(keyword,Slug)
+    .then((results) => {
+      console.log("API Results:", results);  // prints data founf from call 
+    })
+    .catch((error) => {
+      console.error("Error during search:", error); // errors
+    });
+};
+
+
+// example use searchKS("monsters","aalpamac");
+// example use searchK("monsters")
+
+
   
   /**
    * Displays a list of past search keywords from search_history_keyword.json.

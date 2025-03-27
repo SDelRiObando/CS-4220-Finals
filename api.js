@@ -27,3 +27,7 @@ const getDataByKeywordAndSlug = async (keyword, slug) => {
     throw error;
   }
 };
+
+export {getDataByKeyword, getDataByKeywordAndSlug}
+
+

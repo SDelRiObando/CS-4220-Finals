@@ -2,7 +2,7 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  searchK,
+  searchApiByKeyword,
   showKeywordHistory,
   showSelectionHistory,
 } from "./app.js";
@@ -25,13 +25,13 @@ const argv = yargs(hideBin(process.argv))
           choices: ["monsters", "spells", "classes"],
         })
         .positional("selection", {
-          describe: "Detailed search of a specific DnD mechanic by unique identifier",
+          describe:
+            "Detailed search of a specific DnD mechanic by unique identifier",
           type: "string",
         });
     },
     async (args) => {
-      console.log(`Searching for keyword: ${args.keyword}`);
-      await searchK(args.keyword, args.selection || null);
+      await searchApiByKeyword(args.keyword, args.selection || null);
     }
   )
   // Command to search the history by keywords or selection
@@ -40,7 +40,7 @@ const argv = yargs(hideBin(process.argv))
     "View history for previously searched keyword or selections",
     (yargs) => {
       yargs.positional("option", {
-        describe: "Searching history by keywords or selection",
+        describe: "Searching history by keywords or selections",
         type: "string",
         choices: ["keywords", "selections"],
       });
@@ -48,11 +48,9 @@ const argv = yargs(hideBin(process.argv))
     async (args) => {
       switch (args.option) {
         case "keywords":
-          console.log("Showing history - keywords!");
           await showKeywordHistory();
           break;
         case "selections":
-          console.log("Showing history - selections!");
           await showSelectionHistory();
           break;
       }

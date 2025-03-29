@@ -27,6 +27,6 @@ export const getDataByKeywordAndSlug = async (keyword, slug) => {
       throw new Error(`No data found for '${slug}' in '${keyword}'.`);
     }
     console.error(`Error fetching details for '${slug}':`, error.message);
-    throw new Error("Failed to fetch item details. Please try again.");  
+    throw new Error("Failed to fetch item details. Please try again.");
   }
 };

@@ -37,12 +37,12 @@ const argv = yargs(hideBin(process.argv))
   // Command to search the history by keywords or selection
   .command(
     "history <option>",
-    "View history for previously searched keyword or selection",
+    "View history for previously searched keyword or selections",
     (yargs) => {
       yargs.positional("option", {
         describe: "Searching history by keywords or selection",
         type: "string",
-        choices: ["keywords", "selection"],
+        choices: ["keywords", "selections"],
       });
     },
     async (args) => {
@@ -51,7 +51,7 @@ const argv = yargs(hideBin(process.argv))
           console.log("Showing history - keywords!");
           await showKeywordHistory();
           break;
-        case "selection":
+        case "selections":
           console.log("Showing history - selections!");
           await showSelectionHistory();
           break;

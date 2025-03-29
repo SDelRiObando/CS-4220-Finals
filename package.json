@@ -2,6 +2,7 @@
   "dependencies": {
     "@inquirer/prompts": "^7.4.0",
     "axios": "^1.8.4",
+    "inquirer": "^12.5.0",
     "yargs": "^17.7.2"
   },
   "name": "cs-4220-midterm",

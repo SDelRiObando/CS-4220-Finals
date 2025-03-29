@@ -5,12 +5,12 @@ import { select } from '@inquirer/prompts';
 /// Searches for a type of selection Monster/spell/class
 export const searchK = async (keyword, selectedSlug = null) => {
   try {
-    const results = await getDataByKeyword(keyword);
-    
+    const results = await getDataByKeyword(keyword.toLowerCase());
+
     // Extract slugs
-    const slugs = results.results.map((item) => ({
-      name: item.name, 
-      value: item.slug, 
+    const slugs = results.map((item) => ({
+      name: item.name,
+      value: item.slug,
     }));
 
     let finalSlug = selectedSlug;
@@ -32,7 +32,6 @@ export const searchK = async (keyword, selectedSlug = null) => {
     console.error("Error during search:", error);
   }
 };
-
 
 export const searchKS = async (keyword, slug) => {
   getDataByKeywordAndSlug(keyword, slug)
@@ -60,16 +59,13 @@ const printcheck = (results, keyword)=>{
 };
 
 // prints information about monsters
-const monsterprint = (results) =>{
-
+const printMonsterSelection = (results) => {
   console.log("Monster Details:");
   console.log("*******************");
-  console.log("Name: ", results.name);
-  console.log(`Size: `, results.size);
-  console.log("Description: ", results.desc); /// not all have descriptions some have HUGE desciptions may remove 
+  console.log("Name: ", results?.name || "N/A");
+  console.log(`Size: `, results?.size || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
   console.log("*******************");
-
-
 };
 
 // prints information about spells (monster atm)
@@ -83,8 +79,6 @@ const spellprint = (results) =>{
   console.log("Description: ", results.desc);
   console.log(`Level: `, results.level);
   console.log("*******************");
-
-
 };
 
 // prints information about classes (monster atm)
@@ -100,8 +94,6 @@ const classprint = (results) =>{
   console.log(`Weapons: `, results.prof_weapons);
   console.log(`Skills: `, results.prof_skills);
   console.log("*******************");
-
-
 };
 
  // Save keyword to search_history_keyword.json

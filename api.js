@@ -8,15 +8,22 @@ const endpoints = {
   classes: "v1/classes/",
 };
 
-export const getDataByKeyword = async (keyword) => {
+export const getDataByKeyword = async (keyword, page = 1) => {
   try {
-    const res = await axios.get(BASE_URL + endpoints[keyword]);
-    return res.data?.results;
+    const url = `${BASE_URL + endpoints[keyword]}?page=${page}`;
+    const res = await axios.get(url);
+
+    return {
+      results: res.data.results,
+      next: res.data.next, // Link to the next page (or null if none)
+      previous: res.data.previous, // Link to the previous page (or null if none)
+    };
   } catch (error) {
-    console.error(`Error fetching data for '${keyword}':`, error.message);
+    console.error(`Error fetching data for '${keyword}' (page ${page}):`, error.message);
     throw new Error("Failed to fetch data. Please try again.");
   }
 };
+
 
 export const getDataByKeywordAndSlug = async (keyword, slug) => {
   try {

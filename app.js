@@ -2,36 +2,50 @@ import { getDataByKeyword, getDataByKeywordAndSlug } from "./api.js";
 import { insert, find } from "./db.js";
 import { select } from "@inquirer/prompts";
 
-/// Searches for a type of selection Monster/spell/class
-export const searchApiByKeyword = async (keyword, selectedSlug = null) => {
+export const searchApiByKeyword = async (keyword) => {
   try {
-    const results = await getDataByKeyword(keyword.toLowerCase());
+    let page = 1;
+    let finalSlug = null;
 
-    // Extract slugs
-    const slugs = results.map((item) => ({
-      name: item.name,
-      value: item.slug,
-    }));
+    while (true) {
+      const { results, next, previous } = await getDataByKeyword(keyword, page);
 
-    let finalSlug = selectedSlug;
-    if (!selectedSlug) {
-      // If no selection was passed in the CLI, ask the user for one.
-      finalSlug = await select({
-        message: "Select a slug:",
-        choices: slugs,
+      if (results.length === 0) {
+        console.log(`No results found for "${keyword}".`);
+        return;
+      }
+
+      const choices = [
+        { name: "Exit", value: null },
+        ...(previous ? [{ name: "<=Previous", value: "prev" }] : []),
+        ...(next ? [{ name: "Next=>", value: "next" }] : []),
+        ...results.map((item) => ({ name: item.name, value: item.slug })),
+      ];
+
+      const selected = await select({
+        message: `Select a ${keyword} (Page ${page}):`,
+        choices,
       });
+
+      if (selected === null) return; // Exit
+      if (selected === "next") page++; // Go to next page
+      else if (selected === "prev") page--; // Go to previous page
+      else {
+        finalSlug = selected; // User made a selection
+        break;
+      }
     }
 
-    // Now search for the specific item
-    await searchApiByKeywordAndSelection(keyword, finalSlug);
-
-    // Save Keywords and items
-    saveKeywordToHistory(keyword);
-    saveSelectionToHistory(keyword, finalSlug);
+    if (finalSlug) {
+      await searchApiByKeywordAndSelection(keyword, finalSlug);
+      saveKeywordToHistory(keyword);
+      saveSelectionToHistory(keyword, finalSlug);
+    }
   } catch (error) {
-    console.error("Error during search: ", error.message);
+    console.error("Error during search:", error.message);
   }
 };
+
 
 export const searchApiByKeywordAndSelection = async (keyword, slug) => {
   try {

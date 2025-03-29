@@ -1,24 +1,9 @@
 import { getDataByKeyword, getDataByKeywordAndSlug } from "./api.js";
-import { select } from '@inquirer/prompts';
 import { insert, find } from './db.js'; 
-
-
-
-
-
-/**
- * Searches the selected API using the provided keyword.
- * Saves the keyword to search_history_keyword.json if it is unique.
- * Displays a list of search results in a user-friendly format.
- * Saves the selected item to search_history_selection.json if it is unique.
- * Retrieves and displays detailed information for the selected item.
- *
- * @param {string} keyword - The keyword to search for in the selected API.
- */
-
+import { select } from '@inquirer/prompts';
 
 /// Searches for a type of selection Monster/spell/class
-export const searchK = async (keyword) => {
+export const searchK = async (keyword, selectedSlug = null) => {
   try {
     const results = await getDataByKeyword(keyword);
     
@@ -28,26 +13,29 @@ export const searchK = async (keyword) => {
       value: item.slug, 
     }));
 
+    let finalSlug = selectedSlug;
+    if (!selectedSlug) {
+      // If no selection was passed in the CLI, ask the user for one.
+      finalSlug = await select({
+        message: "Select a slug:",
+        choices: slugs,
+      });
+    }
 
-    // Display Options
-    const selectedSlug = await select({
-      message: "Select a slug:",
-      choices: slugs,
-    });
-    // Display Item/specific monster 
-    searchKS(keyword, selectedSlug); 
+    // Now search for the specific item
+    await searchKS(keyword, finalSlug);
+
     // Save Keywords and items 
-    saveKeywordToHistory(keyword)
-    saveSelection(selectedSlug)  } catch (error) {
+    saveKeywordToHistory(keyword);
+    saveSelection(keyword, finalSlug);
+  } catch (error) {
     console.error("Error during search:", error);
   }
 };
 
 
-
-
-export const searchKS = async (keyword, Slug) => {
-  getDataByKeywordAndSlug(keyword, Slug)
+export const searchKS = async (keyword, slug) => {
+  getDataByKeywordAndSlug(keyword, slug)
     .then((results) => {
       console.log(keyword)
       /// print outs in proper format 
@@ -89,11 +77,11 @@ const monsterprint = (results) =>{
 const spellprint = (results) =>{
 
 
-  console.log("Monster Details:");
+  console.log("Spell Details:");
   console.log("*******************");
   console.log("Name: ", results.name);
   console.log("Description: ", results.desc);
-  console.log(`Size: `, results.size);
+  console.log(`Level: `, results.level);
   console.log("*******************");
 
 
@@ -104,23 +92,17 @@ const spellprint = (results) =>{
 
 const classprint = (results) =>{
 
-  console.log("Monster Details:");
+  console.log("Class Details:");
   console.log("*******************");
   console.log("Name: ", results.name);
   console.log("Description: ", results.desc);
-  console.log(`Size: `, results.size);
+  console.log(`Armor: `, results.prof_armor);
+  console.log(`Weapons: `, results.prof_weapons);
+  console.log(`Skills: `, results.prof_skills);
   console.log("*******************");
 
 
 };
-
- // searchKS("monsters","aalpamac"); // example use
- searchK("monsters") //example use
-
-
-
-
-
 
  // Save keyword to search_history_keyword.json
  const saveKeywordToHistory = async (keyword) => {
@@ -133,18 +115,15 @@ const classprint = (results) =>{
      } 
     };
 
-
  // Save item to search_history_selection.json 
-const saveSelection = async (Slug) => {
-  const existingSelections = await find('search_history_selection', { Slug });
+ const saveSelection = async (keyword, slug) => {
+  const existingSelections = await find('search_history_selection', { slug });
 
-  if (existingSelections.length === 0) { 
-    //insert new items 
-      await insert('search_history_selection', { Slug });
+  if (existingSelections.length === 0) {
+    // Insert new selection with both keyword and slug
+    await insert('search_history_selection', { keyword, slug });
   }
 };
-
-///************ NOT SURE IF WE NEED THE FUNCTIONS BELLOW  */
 
 /**
  * Displays a list of past search keywords from search_history_keyword.json.
@@ -152,7 +131,32 @@ const saveSelection = async (Slug) => {
  * If the user selects a keyword, the app re-runs the search with that keyword.
  */
 export const showKeywordHistory = async () => {
-  // Implement displaying keyword history here
+  try {
+    let history = await find('search_history_keyword');
+
+    // Print the type and the data returned by find
+    console.log("Data type of history:", typeof history);
+    console.log("History data:", history);
+
+    // Ensure history is always an array
+    if (!Array.isArray(history)) {
+      history = history ? [history] : []; // Convert object to array, or default to empty array
+    }
+
+    if (history.length === 0) {
+      console.log("No keyword history found.");
+      return;
+    }
+
+    const selectedKeyword = await select({
+      message: "Select a keyword from history to search again:",
+      choices: [{ name: "Exit", value: null },...history.map((h) => ({ name: h.keyword, value: h.keyword }))],
+    });
+
+    if (selectedKeyword) await searchK(selectedKeyword);
+  } catch (error) {
+    console.error("Error displaying keyword history:", error);
+  }
 };
 
 /**
@@ -161,46 +165,24 @@ export const showKeywordHistory = async () => {
  * If the user selects an item, the app retrieves and displays its detailed information.
  */
 export const showSelectionHistory = async () => {
-  // Implement displaying selection history here
-};
+  const history = await find('search_history_selection');
+  if (history.length === 0) {
+    console.log("No selection history found.");
+    return;
+  }
 
-/**
- * Reads the content from a given history file (either keyword or selection history).
- * If the file doesn't exist, it returns an empty array.
- *
- * @param {string} file - The path to the history file to read from (e.g., 'search_history_keyword.json').
- * @returns {Array} - The content of the history file or an empty array if the file doesn't exist.
- */
-const readHistory = (file) => {
-  // Implement reading history from file here
-};
-
-/**
- * Saves a unique entry to a specified history file.
- * Checks if the entry is already present in the file before adding it.
- *
- * @param {string} file - The path to the history file (e.g., 'search_history_keyword.json').
- * @param {Object} entry - The entry to be saved to the history file (either a keyword or selection).
- */
-const saveHistory = (file, entry) => {
-  // Implement saving unique history entries here
-};
-
-/**
- * Handles the command line arguments and executes the corresponding functionality.
- * Runs the search function for a keyword or displays history based on the argument.
- *
- * @param {string} command - The command to execute, either 'search' or 'history'.
- * @param {Array} args - The arguments passed with the command (e.g., keyword for search or 'keywords'/'selections' for history).
- */
-const handleCommand = async (command, args) => {
-  // Implement command handling here
-};
-
-/**
- * Executes the app based on user input from the command line.
- * Parses the command and arguments and calls the appropriate function (search, showKeywordHistory, or showSelectionHistory).
- */
-const runApp = () => {
-  // Implement running the app here
+  const selectedSlug = await select({
+    message: "Select an item from history to view details:",
+    choices: [{ name: "Exit", value: null }, ...history.map((h) => ({ name: h.slug, value: h.slug }))],
+  });
+  if (selectedSlug) {
+    // Get the corresponding keyword for the selected slug
+    const selection = history.find((h) => h.slug === selectedSlug); // Find the item that matches the selected slug
+    if (selection) {
+      const keyword = selection.keyword;  // Access the keyword from the selection object
+      await searchKS(keyword, selectedSlug);  // Pass the keyword and selected slug to searchKS
+    } else {
+      console.log("No corresponding keyword found for the selection.");
+    }
+  }
 };

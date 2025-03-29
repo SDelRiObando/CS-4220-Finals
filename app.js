@@ -13,9 +13,9 @@ import { insert, find } from "./db.js";
  */
 
 /// Searches for a type of selection Monster/spell/class
-export const searchK = async (keyword) => {
+export const searchApiByKeyword = async (keyword) => {
   try {
-    const results = await getDataByKeyword(keyword);
+    const results = await getDataByKeyword(keyword.toLowerCase());
 
     // Extract slugs
     const slugs = results.map((item) => ({
@@ -23,71 +23,77 @@ export const searchK = async (keyword) => {
       value: item.slug,
     }));
 
-    // Display Options
+    // Display options
     const selectedSlug = await select({
-      message: "Select a slug:",
+      message: "Select one of the following options:",
       choices: slugs,
     });
+
     // Display Item/specific monster
-    searchKS(keyword, selectedSlug);
-    // Save Keywords and items
+    searchApiByKeywordAndSelection(keyword, selectedSlug);
+
+    // Save Keywords and selections
     saveKeywordToHistory(keyword);
     saveSelectionToHistory(selectedSlug);
   } catch (error) {
-    console.error("Error during search:", error);
+    console.error("Error during keyword search:", error.message);
   }
 };
 
-export const searchKS = async (keyword, Slug) => {
-  getDataByKeywordAndSlug(keyword, Slug).then((results) => {
-    console.log(keyword);
-    /// print outs in proper format
-    printcheck(results, keyword);
-    //console.log("API Results:", results); // prints data founf from call /////////// CODE NO LONGER NEEDED MAY REMOVE AFTER REVIEW
-  });
-};
+export const searchApiByKeywordAndSelection = async (keyword, slug) => {
+  try {
+    const results = await getDataByKeywordAndSlug(
+      keyword.toLowerCase(),
+      slug.toLowerCase()
+    );
 
-// print different things based on keyword
-const printcheck = (results, keyword) => {
-  if (keyword == "monsters") monsterprint(results);
-  if (keyword == "spells") spellprint(results);
-  if (keyword == "classes") classprint(results);
+    // Print selections differently based on keywords
+    switch (keyword.toLowerCase()) {
+      case "monsters":
+        printMonsterSelection(results);
+        break;
+      case "spells":
+        printSpellSelection(results);
+        break;
+      case "classes":
+        printClassSelection(results);
+        break;
+    }
+  } catch (error) {
+    console.error("Error during selection search: ", error.message);
+  }
 };
 
 // prints information about monsters
-const monsterprint = (results) => {
+const printMonsterSelection = (results) => {
   console.log("Monster Details:");
   console.log("*******************");
-  console.log("Name: ", results.name);
-  console.log(`Size: `, results.size);
-  console.log("Description: ", results.desc); /// not all have descriptions some have HUGE desciptions may remove
+  console.log("Name: ", results?.name || "N/A");
+  console.log(`Size: `, results?.size || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
   console.log("*******************");
 };
 
 // prints information about spells (monster atm)
-
-const spellprint = (results) => {
-  console.log("Monster Details:");
+const printSpellSelection = (results) => {
+  console.log("Spell Details:");
   console.log("*******************");
-  console.log("Name: ", results.name);
-  console.log("Description: ", results.desc);
-  console.log(`Size: `, results.size);
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log(`Level: `, results?.level || "N/A");
+  console.log(`Range: `, results?.range || "N/A");
   console.log("*******************");
 };
 
 // prints information about classes (monster atm)
-
-const classprint = (results) => {
-  console.log("Monster Details:");
+const printClassSelection = (results) => {
+  console.log("Class Details:");
   console.log("*******************");
-  console.log("Name: ", results.name);
-  console.log("Description: ", results.desc);
-  console.log(`Size: `, results.size);
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log(`Equipment: `, results?.equipment || "N/A");
   console.log("*******************");
 };
-
-// searchKS("monsters","aalpamac"); // example use
-searchK("monsters"); //example use
 
 // Save keyword to search_history_keyword.json
 const saveKeywordToHistory = async (keyword) => {

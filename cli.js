@@ -2,8 +2,8 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 
 import {
-  searchK,
-  searchKS,
+  searchApiByKeyword,
+  searchApiByKeywordAndSelection,
   showKeywordHistory,
   showSelectionHistory,
 } from "./app.js";
@@ -32,17 +32,10 @@ const argv = yargs(hideBin(process.argv))
         });
     },
     async (args) => {
-      console.log(`searching!`);
       if (args?.selection) {
-        console.log(
-          `with selection! - keyword: ${args.keyword} selection:${args.selection}`
-        );
-        // await searchKS(args.keyword, args.selection);
+        await searchApiByKeywordAndSelection(args.keyword, args.selection);
       } else {
-        console.log(
-          `only keyword, without selection! - keyword: ${args.keyword}`
-        );
-        // await searchK(args.keyword);
+        await searchApiByKeyword(args.keyword);
       }
     }
   )

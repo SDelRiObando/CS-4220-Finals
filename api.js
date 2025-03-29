@@ -4,7 +4,7 @@ const BASE_URL = "https://api.open5e.com/";
 
 const endpoints = {
   monsters: "v1/monsters/",
-  spells: "v2/spells/",
+  spells: "v1/spells/",
   classes: "v1/classes/",
 };
 

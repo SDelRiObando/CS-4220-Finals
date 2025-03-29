@@ -8,26 +8,20 @@ const endpoints = {
   classes: "v1/classes/",
 };
 
-const getDataByKeyword = async (keyword) => {
+export const getDataByKeyword = async (keyword) => {
   try {
     const res = await axios.get(BASE_URL + endpoints[keyword]);
-    return res.data;
+    return res.data?.results;
   } catch (error) {
     throw error;
   }
 };
 
-const getDataByKeywordAndSlug = async (keyword, slug) => {
+export const getDataByKeywordAndSlug = async (keyword, slug) => {
   try {
-    const res = await axios.get(
-      `${BASE_URL}${endpoints[keyword]}${slug}/`
-    );
+    const res = await axios.get(`${BASE_URL}${endpoints[keyword]}${slug}/`);
     return res.data;
   } catch (error) {
     throw error;
   }
 };
-
-export {getDataByKeyword, getDataByKeywordAndSlug}
-
-

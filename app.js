@@ -1,10 +1,6 @@
 import { getDataByKeyword, getDataByKeywordAndSlug } from "./api.js";
-import { select } from '@inquirer/prompts';
-import { insert, find } from './db.js'; 
-
-
-
-
+import { select } from "@inquirer/prompts";
+import { insert, find } from "./db.js";
 
 /**
  * Searches the selected API using the provided keyword.
@@ -16,131 +12,101 @@ import { insert, find } from './db.js';
  * @param {string} keyword - The keyword to search for in the selected API.
  */
 
-
 /// Searches for a type of selection Monster/spell/class
 export const searchK = async (keyword) => {
   try {
     const results = await getDataByKeyword(keyword);
-    
-    // Extract slugs
-    const slugs = results.results.map((item) => ({
-      name: item.name, 
-      value: item.slug, 
-    }));
 
+    // Extract slugs
+    const slugs = results.map((item) => ({
+      name: item.name,
+      value: item.slug,
+    }));
 
     // Display Options
     const selectedSlug = await select({
       message: "Select a slug:",
       choices: slugs,
     });
-    // Display Item/specific monster 
-    searchKS(keyword, selectedSlug); 
-    // Save Keywords and items 
-    saveKeywordToHistory(keyword)
-    saveSelection(selectedSlug)  } catch (error) {
+    // Display Item/specific monster
+    searchKS(keyword, selectedSlug);
+    // Save Keywords and items
+    saveKeywordToHistory(keyword);
+    saveSelectionToHistory(selectedSlug);
+  } catch (error) {
     console.error("Error during search:", error);
   }
 };
 
-
-
-
 export const searchKS = async (keyword, Slug) => {
-  getDataByKeywordAndSlug(keyword, Slug)
-    .then((results) => {
-      console.log(keyword)
-      /// print outs in proper format 
-      printcheck(results,keyword)
-      //console.log("API Results:", results); // prints data founf from call /////////// CODE NO LONGER NEEDED MAY REMOVE AFTER REVIEW
-    })
-
+  getDataByKeywordAndSlug(keyword, Slug).then((results) => {
+    console.log(keyword);
+    /// print outs in proper format
+    printcheck(results, keyword);
+    //console.log("API Results:", results); // prints data founf from call /////////// CODE NO LONGER NEEDED MAY REMOVE AFTER REVIEW
+  });
 };
 
 // print different things based on keyword
-const printcheck = (results, keyword)=>{
-
-  if (keyword =="monsters")
-    monsterprint(results)
-
-  if (keyword == "spells")
-    spellprint(results)
-  if (keyword == "classes")
-    classprint(results)
-
-
+const printcheck = (results, keyword) => {
+  if (keyword == "monsters") monsterprint(results);
+  if (keyword == "spells") spellprint(results);
+  if (keyword == "classes") classprint(results);
 };
 
 // prints information about monsters
-const monsterprint = (results) =>{
-
+const monsterprint = (results) => {
   console.log("Monster Details:");
   console.log("*******************");
   console.log("Name: ", results.name);
   console.log(`Size: `, results.size);
-  console.log("Description: ", results.desc); /// not all have descriptions some have HUGE desciptions may remove 
+  console.log("Description: ", results.desc); /// not all have descriptions some have HUGE desciptions may remove
   console.log("*******************");
-
-
 };
 
 // prints information about spells (monster atm)
 
-const spellprint = (results) =>{
-
-
+const spellprint = (results) => {
   console.log("Monster Details:");
   console.log("*******************");
   console.log("Name: ", results.name);
   console.log("Description: ", results.desc);
   console.log(`Size: `, results.size);
   console.log("*******************");
-
-
 };
 
 // prints information about classes (monster atm)
 
-
-const classprint = (results) =>{
-
+const classprint = (results) => {
   console.log("Monster Details:");
   console.log("*******************");
   console.log("Name: ", results.name);
   console.log("Description: ", results.desc);
   console.log(`Size: `, results.size);
   console.log("*******************");
-
-
 };
 
- // searchKS("monsters","aalpamac"); // example use
- searchK("monsters") //example use
+// searchKS("monsters","aalpamac"); // example use
+searchK("monsters"); //example use
 
+// Save keyword to search_history_keyword.json
+const saveKeywordToHistory = async (keyword) => {
+  // Check if the keyword already exists
+  const existingKeywords = await find("search_history_keyword", { keyword });
 
+  if (existingKeywords.length === 0) {
+    // inserts new key words
+    await insert("search_history_keyword", { keyword });
+  }
+};
 
+// Save item to search_history_selection.json
+const saveSelectionToHistory = async (Slug) => {
+  const existingSelections = await find("search_history_selection", { Slug });
 
-
-
- // Save keyword to search_history_keyword.json
- const saveKeywordToHistory = async (keyword) => {
-     // Check if the keyword already exists
-     const existingKeywords = await find('search_history_keyword', { keyword });
- 
-     if (existingKeywords.length === 0) {
-       // inserts new key words 
-       await insert('search_history_keyword', { keyword });
-     } 
-    };
-
-
- // Save item to search_history_selection.json 
-const saveSelection = async (Slug) => {
-  const existingSelections = await find('search_history_selection', { Slug });
-
-  if (existingSelections.length === 0) { 
-    //insert new items 
-      await insert('search_history_selection', { Slug });
+  if (existingSelections.length === 0) {
+    //insert new items
+    await insert("search_history_selection", { Slug });
   }
 };
 

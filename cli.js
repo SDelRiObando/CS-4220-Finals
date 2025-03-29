@@ -1,54 +1,73 @@
 import yargs from "yargs/yargs";
-import hideBin from "yargs/helpers";
-import { searchK, searchKS, showKeywordHistory, showSelecctionHistory} from "./app.js";
+import { hideBin } from "yargs/helpers";
+
+import {
+  searchK,
+  searchKS,
+  showKeywordHistory,
+  showSelectionHistory,
+} from "./app.js";
 
 /*
   CLI setup with yargs
   this js page sets up the commands for user execution
 */
 const argv = yargs(hideBin(process.argv))
-// command to search the api by the keyword.
-  .command("search <keyword>", "Search DnD Api by Keyword", (yargs) => {
-    yargs.positional("keyword", {
-      describe: "keyword search",
-      type: "string"
-    });
-
-  },
-  async (argv) => {
-    await searchK(argv.keyword);
-    
-  })
-  .command ("detail <keyword> <slug>", "Detailed data for items via unique identifier", (yargs) => {
-  yargs
-  .positional("keyword",{
-    describe:"keyword search",
-    type: "string"
-  })s
-  .positional("slug", {
-    describe:"keyword search",
-    type: "string"
-  });
-  }, 
-
-  // executes searchK function
-  // it displays api results
-  async (argv) => {
-    await searchKS(argv.keyword, argv.slug);
-  })
-
-  /*
-  commands to view previous keywrods from the history, additionally it allows users
-  to view previous history searches
-  */
-  .command("history keywords","View previous search keywords", async () => {
-    await showKeywordHistory();
-  })
-  .command("history selection","View previous selection", async () => {
-    await showSelecctionHistory();
-  })
-  // help function that provides information to the user
-  .help()
-  .argv;
-
-
+  .usage("$0: Usage <command> [options]")
+  // command to search the api by the keyword.
+  .command(
+    "search <keyword> [selection]",
+    "Search DnD Api by Keyword",
+    (yargs) => {
+      yargs
+        .positional("keyword", {
+          describe: "searching by DnD keyword game mechanic",
+          type: "string",
+          choices: ["monsters", "spells", "classes"],
+        })
+        .options("selection", {
+          describe:
+            "detailed search of a specific DnD mechanic by unique identifier",
+          type: "string",
+        });
+    },
+    async (args) => {
+      console.log(`searching!`);
+      if (args?.selection) {
+        console.log(
+          `with selection! - keyword: ${args.keyword} selection:${args.selection}`
+        );
+        // await searchKS(args.keyword, args.selection);
+      } else {
+        console.log(
+          `only keyword, without selection! - keyword: ${args.keyword}`
+        );
+        // await searchK(args.keyword);
+      }
+    }
+  )
+  // command to search the history by keywords or selection
+  .command(
+    "history <option>",
+    "View history for previously searched keyword or selection",
+    (yargs) => {
+      yargs.positional("option", {
+        describe: "searching history by keywords or selection",
+        type: "string",
+        choices: ["keywords", "selection"],
+      });
+    },
+    async (args) => {
+      switch (args.option) {
+        case "keywords":
+          console.log("Showing history - keywords!");
+          // await showKeywordHistory();
+          break;
+        case "selection":
+          console.log("Showing history - selections!");
+          // await showSelectionHistory();
+          break;
+      }
+    }
+  )
+  .help().argv;

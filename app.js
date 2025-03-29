@@ -59,7 +59,7 @@ const printcheck = (results, keyword)=>{
 };
 
 // prints information about monsters
-const printMonsterSelection = (results) => {
+const monsterprint = (results) => {
   console.log("Monster Details:");
   console.log("*******************");
   console.log("Name: ", results?.name || "N/A");

@@ -2,6 +2,7 @@ import { getDataByKeyword, getDataByKeywordAndSlug } from "./api.js";
 import { insert, find } from "./db.js";
 import { select } from "@inquirer/prompts";
 
+//Antonio
 export const searchApiByKeyword = async (keyword) => {
   try {
     let page = 1;
@@ -46,7 +47,7 @@ export const searchApiByKeyword = async (keyword) => {
   }
 };
 
-
+//Antonio
 export const searchApiByKeywordAndSelection = async (keyword, slug) => {
   try {
     const results = await getDataByKeywordAndSlug(keyword, slug);
@@ -131,6 +132,7 @@ const printClassesSelection = (results) => {
   console.log("*******************");
 };
 
+//Mikey
 // prints information about Spell Lists Per Class
 const printSpellListSelection = async (results) => {
   if (!results?.spells || results.spells.length === 0) {
@@ -266,6 +268,7 @@ const printArmorSelection = (results) => {
   console.log("*******************");
 };
 
+//Mikey
 // Save keyword to search_history_keyword.json
 const saveKeywordToHistory = async (keyword) => {
   // Check if the keyword already exists
@@ -277,6 +280,7 @@ const saveKeywordToHistory = async (keyword) => {
   }
 };
 
+//Mikey
 // Save item to search_history_selection.json
 const saveSelectionToHistory = async (keyword, slug) => {
   const existingSelections = await find("search_history_selection", { slug });
@@ -287,6 +291,7 @@ const saveSelectionToHistory = async (keyword, slug) => {
   }
 };
 
+//Santiago
 /**
  * Displays a list of past search keywords from search_history_keyword.json.
  * The first option must be "Exit" to terminate the app.
@@ -295,7 +300,7 @@ const saveSelectionToHistory = async (keyword, slug) => {
 export const showKeywordHistory = async () => {
   try {
     let history = await find("search_history_keyword");
-    
+
     if (history.length === 0) {
       console.log("No keyword history found.");
       return;
@@ -315,6 +320,7 @@ export const showKeywordHistory = async () => {
   }
 };
 
+//Santiago
 /**
  * Displays a list of past selections (items) from search_history_selection.json.
  * The first option must be "Exit" to terminate the app.

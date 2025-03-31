@@ -3,10 +3,12 @@ import { hideBin } from "yargs/helpers";
 
 import {
   searchApiByKeyword,
+  searchApiByKeywordAndSelection,
   showKeywordHistory,
   showSelectionHistory,
 } from "./app.js";
 
+//Weston and Angel
 /*
   CLI setup with yargs
   this js page sets up the commands for user execution
@@ -32,7 +34,11 @@ const argv = yargs(hideBin(process.argv))
         });
     },
     async (args) => {
-      await searchApiByKeyword(args.keyword, args.selection || null);
+      if (args?.selection) {
+        await searchApiByKeywordAndSelection(args.keyword, args.selection);
+      } else {
+        await searchApiByKeyword(args.keyword);
+      }    
     }
   )
   // Command to search the history by keywords or selection

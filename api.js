@@ -19,6 +19,7 @@ const endpoints = {
   armor: "v1/armor/",
 };
 
+//James
 export const getDataByKeyword = async (keyword, page = 1) => {
   try {
     const url = `${BASE_URL + endpoints[keyword]}?page=${page}`;
@@ -35,7 +36,7 @@ export const getDataByKeyword = async (keyword, page = 1) => {
   }
 };
 
-
+//James
 export const getDataByKeywordAndSlug = async (keyword, slug) => {
   try {
     if (keyword === "documents") {

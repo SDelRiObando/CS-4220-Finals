@@ -32,7 +32,7 @@ The core features of this project include:
 
 
 ### Sources and References:
-- [DnD 5e API](https://www.dnd5eapi.co/) - Provides data on DnD monsters, spells, and classes.
+- [DnD 5e API](https://open5e.com/) - Provides data on DnD monsters, spells, and classes.
 - [yargs Documentation](https://yargs.js.org/) - Sets CLI commands.
 - [axios Documentation](https://www.npmjs.com/package/axios) - HTTP client
 

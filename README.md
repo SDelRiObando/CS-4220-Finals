@@ -93,6 +93,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Angel I. Gutierrez Sanjuan    | https://github.com/AngelinCS
 - Antonio J. Ortega             | https://github.com/AntonioOrtega8
 - James San                     | https://github.com/PickolZi
-- Micheal Hareu                 |
+- Micheal Hareu                 | https://github.com/CheezusCrust01
 
 

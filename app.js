@@ -295,12 +295,7 @@ const saveSelectionToHistory = async (keyword, slug) => {
 export const showKeywordHistory = async () => {
   try {
     let history = await find("search_history_keyword");
-
-    // Ensure history is always an array
-    if (!Array.isArray(history)) {
-      history = history ? [history] : []; // Convert object to array, or default to empty array
-    }
-
+    
     if (history.length === 0) {
       console.log("No keyword history found.");
       return;

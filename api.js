@@ -6,6 +6,17 @@ const endpoints = {
   monsters: "v1/monsters/",
   spells: "v1/spells/",
   classes: "v1/classes/",
+  spelllist: "v1/spelllist/",
+  documents: "v1/documents/",
+  backgrounds: "v1/backgrounds/",
+  planes: "v1/planes/",
+  sections: "v1/sections/",
+  feats: "v1/feats/",
+  conditions: "v1/conditions/",
+  races: "v1/races/",
+  magicitems: "v1/magicitems/",
+  weapons: "v1/weapons/",
+  armor: "v1/armor/",
 };
 
 export const getDataByKeyword = async (keyword, page = 1) => {
@@ -27,8 +38,13 @@ export const getDataByKeyword = async (keyword, page = 1) => {
 
 export const getDataByKeywordAndSlug = async (keyword, slug) => {
   try {
-    const res = await axios.get(`${BASE_URL}${endpoints[keyword]}${slug}/`);
-    return res.data;
+    if (keyword === "documents") {
+      const res = await axios.get(`${BASE_URL}${endpoints[keyword]}?slug=${slug}`);
+      return res.data.results;
+    } else {
+      const res = await axios.get(`${BASE_URL}${endpoints[keyword]}${slug}/`);
+      return res.data;
+    }
   } catch (error) {
     if (error.response?.status === 404) {
       throw new Error(`No data found for '${slug}' in '${keyword}'.`);

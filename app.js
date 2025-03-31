@@ -60,6 +60,39 @@ export const searchApiByKeywordAndSelection = async (keyword, slug) => {
       case "classes":
         printClassesSelection(results);
         break;
+      case "spelllist":
+        printSpellListSelection(results);
+        break;
+      case "documents":
+        printDocumentsSelection(results);
+        break;
+      case "backgrounds":
+        printBackgroundsSelection(results);
+        break;
+      case "planes":
+        printPlanesSelection(results);
+        break;
+      case "sections":
+        printSectionsSelection(results);
+        break;
+      case "feats":
+        printFeatsSelection(results);
+        break;
+      case "conditions":
+        printConditionsSelection(results);
+        break;
+      case "races":
+        printRacesSelection(results);
+        break;
+      case "magicitems":
+        printMagicItemsSelection(results);
+        break;
+      case "weapons":
+        printWeaponsSelection(results);
+        break;
+      case "armor":
+        printArmorSelection(results);
+        break;
     }
   } catch (error) {
     console.error("Error during keyword and selection search: ", error.message);
@@ -95,6 +128,137 @@ const printClassesSelection = (results) => {
   console.log(`Armor: `, results?.prof_armor || "N/A");
   console.log(`Weapons: `, results?.prof_weapons || "N/A");
   console.log(`Skills: `, results?.prof_skills || "N/A");
+  console.log("*******************");
+};
+
+// prints information about Spell Lists Per Class
+const printSpellListSelection = async (results) => {
+  if (!results?.spells || results.spells.length === 0) {
+    console.log("No spells found.");
+    return;
+  }
+  console.log("Class Spells Details:");
+  console.log("*******************");
+  console.log("Class: ", results?.name || "N/A");
+  console.log("Class Spells: ");
+  const formattedSpells = results.spells.map((spell) => ({
+    name: spell.replace(/-/g, " "),
+    value: spell,
+  }));
+
+  const selectedSpell = await select({
+    message: "Select a spell to view details:",
+    choices: formattedSpells,
+    pageSize: 10, // Enables scrolling
+  });
+
+  if (selectedSpell) {
+    await searchApiByKeywordAndSelection("spells", selectedSpell);
+  }
+};
+
+//print information about documents
+const printDocumentsSelection = (results) => {
+  console.log("Document Details:");
+  console.log("*******************");
+  console.log("Title: ", results[0]?.title || "N/A");
+  console.log("Description: ", results[0]?.desc || "N/A");
+  console.log("Author: ", results[0]?.author || "N/A");
+  console.log("*******************");
+};
+
+// prints information about backgrounds
+const printBackgroundsSelection = (results) => {
+  console.log("Backgrounds Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log("Skill Proficiencies: ", results?.skill_proficiencies || "N/A");
+  console.log("Feature: ", results?.feature || "N/A");
+  console.log("Feature Description: ", results?.feature_desc || "N/A");
+  console.log("*******************");
+};
+
+// prints information about planes
+const printPlanesSelection = (results) => {
+  console.log("Planes Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log("*******************");
+};
+
+// prints information about planes
+const printSectionsSelection = (results) => {
+  console.log("Sections Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log("Parent: ", results?.parent || "N/A");
+  console.log("*******************");
+};
+
+// prints information about feats
+const printFeatsSelection = (results) => {
+  console.log("Feats Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log("Prerequiste: ", results?.prerequisite || "N/A");
+  console.log("Effects: ", results?.effects_desc || "N/A");
+  console.log("*******************");
+};
+
+// prints information about Conditions
+const printConditionsSelection = (results) => {
+  console.log("Conditions Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log("*******************");
+};
+
+// prints information about races
+const printRacesSelection = (results) => {
+  console.log("Races Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log("Alignment: ", results?.alignment || "N/A");
+  console.log("Traits: ", results?.traits || "N/A");
+  console.log("*******************");
+};
+
+// prints information about Magic Items
+const printMagicItemsSelection = (results) => {
+  console.log("Magic Items Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Type: ", results?.type || "N/A");
+  console.log("Rarity: ", results?.rarity || "N/A");
+  console.log("Description: ", results?.desc || "N/A");
+  console.log("*******************");
+};
+
+// prints information about Weapons
+const printWeaponsSelection = (results) => {
+  console.log("Weapons Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Category: ", results?.category || "N/A");
+  console.log("Cost: ", results?.cost || "N/A");
+  console.log("Damage Type: ", results?.damage_type || "N/A");
+  console.log("*******************");
+};
+
+// prints information about Armor
+const printArmorSelection = (results) => {
+  console.log("Armor Details:");
+  console.log("*******************");
+  console.log("Name: ", results?.name || "N/A");
+  console.log("Category: ", results?.category || "N/A");
+  console.log("Base AC: ", results?.base_ac || "N/A");
+  console.log("Cost: ", results?.cost || "N/A");
   console.log("*******************");
 };
 

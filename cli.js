@@ -22,7 +22,8 @@ const argv = yargs(hideBin(process.argv))
         .positional("keyword", {
           describe: "Searching by DnD keyword game mechanic",
           type: "string",
-          choices: ["monsters", "spells", "classes"],
+          choices: ["monsters", "spells", "classes", "spelllist", "documents", "backgrounds",
+                    "planes", "sections", "feats", "conditions", "races", "magicitems", "weapons", "armor"],
         })
         .positional("selection", {
           describe:

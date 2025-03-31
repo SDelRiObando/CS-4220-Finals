@@ -1,5 +1,1 @@
-[
-  { "keyword": "monsters", "_id": "1743282751123-838" },
-  { "keyword": "spells", "_id": "1743282783371-747" },
-  { "keyword": "classes", "_id": "1743283991422-551" }
-]
+[{"keyword":"monsters","_id":"1743282751123-838"},{"keyword":"spells","_id":"1743282783371-747"},{"keyword":"classes","_id":"1743283991422-551"},{"keyword":"spelllist","_id":"1743381651862-287"},{"keyword":"documents","_id":"1743382737437-43"},{"keyword":"backgrounds","_id":"1743383920171-826"},{"keyword":"planes","_id":"1743384089816-41"},{"keyword":"sections","_id":"1743384282461-150"},{"keyword":"feats","_id":"1743384441152-892"},{"keyword":"conditions","_id":"1743384643368-992"},{"keyword":"races","_id":"1743384861321-88"},{"keyword":"magicitems","_id":"1743385041302-226"},{"keyword":"weapons","_id":"1743385686930-638"},{"keyword":"armor","_id":"1743385863148-844"}]

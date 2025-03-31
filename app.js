@@ -105,8 +105,9 @@ const printMonsterSelection = (results) => {
   console.log("Monster Details:");
   console.log("*******************");
   console.log("Name: ", results?.name || "N/A");
-  console.log("Description: ", results?.desc || "N/A");
-  console.log(`Size: `, results?.size || "N/A");
+  console.log("Armor Class: ", results?.armor_class || "N/A");
+  console.log("Challenge Rating: ", results?.challenge_rating || "N/A");
+  console.log("Size: ", results?.size || "N/A");
   console.log("*******************");
 };
 
@@ -126,9 +127,9 @@ const printClassesSelection = (results) => {
   console.log("*******************");
   console.log("Name: ", results?.name || "N/A");
   console.log("Description: ", results?.desc || "N/A");
-  console.log(`Armor: `, results?.prof_armor || "N/A");
-  console.log(`Weapons: `, results?.prof_weapons || "N/A");
-  console.log(`Skills: `, results?.prof_skills || "N/A");
+  console.log("Armor: ", results?.prof_armor || "N/A");
+  console.log("Weapons: ", results?.prof_weapons || "N/A");
+  console.log("Skills: ", results?.prof_skills || "N/A");
   console.log("*******************");
 };
 
@@ -263,7 +264,7 @@ const printArmorSelection = (results) => {
   console.log("*******************");
   console.log("Name: ", results?.name || "N/A");
   console.log("Category: ", results?.category || "N/A");
-  console.log("Base AC: ", results?.base_ac || "N/A");
+  console.log("Base Armor Class: ", results?.base_ac || "N/A");
   console.log("Cost: ", results?.cost || "N/A");
   console.log("*******************");
 };

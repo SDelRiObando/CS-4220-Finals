@@ -146,10 +146,14 @@ const printSpellListSelection = async (results) => {
     value: spell,
   }));
 
+  const choices = [
+    { name: "Exit", value: null },
+    ...formattedSpells,
+  ];
+
   const selectedSpell = await select({
     message: "Select a spell to view details:",
-    choices: formattedSpells,
-    pageSize: 10, // Enables scrolling
+    choices,
   });
 
   if (selectedSpell) {

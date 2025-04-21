@@ -36,6 +36,27 @@ export const getDataByKeyword = async (keyword, page = 1) => {
   }
 };
 
+// Santi - Search with query string
+export const searchByKeyword = async (keyword, searchTerm, page = 1) => {
+  try {
+    if (!endpoints[keyword]) {
+      throw new Error(`Invalid keyword: '${keyword}'`);
+    }
+
+    const url = `${BASE_URL}${endpoints[keyword]}?search=${encodeURIComponent(searchTerm)}&page=${page}`;
+    const res = await axios.get(url);
+
+    return {
+      results: res.data.results,
+      next: res.data.next,
+      previous: res.data.previous,
+    };
+  } catch (error) {
+    console.error(`Search error for '${searchTerm}' in '${keyword}':`, error.message);
+    throw new Error("Search failed. Please try again.");
+  }
+};
+
 //James
 export const getDataByKeywordAndSlug = async (keyword, slug) => {
   try {

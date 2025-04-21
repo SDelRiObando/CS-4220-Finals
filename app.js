@@ -1,4 +1,4 @@
-import { getDataByKeyword, getDataByKeywordAndSlug } from "./api.js";
+import { getDataByKeyword, searchByKeyword, getDataByKeywordAndSlug } from "./api.js";
 import { insert, find } from "./db.js";
 import { select } from "@inquirer/prompts";
 
@@ -44,6 +44,53 @@ export const searchApiByKeyword = async (keyword) => {
     }
   } catch (error) {
     console.error("Error during search:", error.message);
+  }
+};
+
+export const searchWithinCategory = async (keyword, searchTerm) => {
+  try {
+    let page = 1;
+    let finalSlug = null;
+
+    while (true) {
+      const { results, next, previous } = await searchByKeyword(keyword, searchTerm, page);
+
+      if (results.length === 0) {
+        console.log(`No results found for "${searchTerm}" in ${keyword}.`);
+        return;
+      }
+
+      const choices = [
+        { name: "Exit", value: null },
+        ...(previous ? [{ name: "<= Previous", value: "prev" }] : []),
+        ...(next ? [{ name: "Next =>", value: "next" }] : []),
+        ...results.map((item) => ({
+          name: item.name,
+          value: item.slug,
+        })),
+      ];
+
+      const selected = await select({
+        message: `Results for "${searchTerm}" in '${keyword}' (Page ${page}):`,
+        choices,
+      });
+
+      if (selected === null) return;
+      if (selected === "next") page++;
+      else if (selected === "prev") page--;
+      else {
+        finalSlug = selected;
+        break;
+      }
+    }
+
+    if (finalSlug) {
+      await searchApiByKeywordAndSelection(keyword, finalSlug);
+      saveKeywordToHistory(keyword);
+      saveSelectionToHistory(keyword, finalSlug);
+    }
+  } catch (error) {
+    console.error("Search failed:", error.message);
   }
 };
 

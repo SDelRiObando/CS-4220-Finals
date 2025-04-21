@@ -3,9 +3,9 @@ import { hideBin } from "yargs/helpers";
 
 import {
   searchApiByKeyword,
-  searchApiByKeywordAndSelection,
   showKeywordHistory,
   showSelectionHistory,
+  searchWithinCategory
 } from "./app.js";
 
 //Weston and Angel
@@ -35,7 +35,7 @@ const argv = yargs(hideBin(process.argv))
     },
     async (args) => {
       if (args?.selection) {
-        await searchApiByKeywordAndSelection(args.keyword, args.selection);
+        await searchWithinCategory(args.keyword, args.selection);
       } else {
         await searchApiByKeyword(args.keyword);
       }    

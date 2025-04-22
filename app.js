@@ -5,6 +5,7 @@ import { select } from "@inquirer/prompts";
 //Antonio
 export const searchApiByKeyword = async (keyword) => {
   try {
+    saveKeywordToHistory(keyword);
     let page = 1;
     let finalSlug = null;
 
@@ -39,7 +40,6 @@ export const searchApiByKeyword = async (keyword) => {
 
     if (finalSlug) {
       await searchApiByKeywordAndSelection(keyword, finalSlug);
-      saveKeywordToHistory(keyword);
       saveSelectionToHistory(keyword, finalSlug);
     }
   } catch (error) {
@@ -49,6 +49,7 @@ export const searchApiByKeyword = async (keyword) => {
 
 export const searchWithinCategory = async (keyword, searchTerm) => {
   try {
+    saveKeywordToHistory(keyword, searchTerm);
     let page = 1;
     let finalSlug = null;
 
@@ -86,7 +87,6 @@ export const searchWithinCategory = async (keyword, searchTerm) => {
 
     if (finalSlug) {
       await searchApiByKeywordAndSelection(keyword, finalSlug);
-      saveKeywordToHistory(keyword);
       saveSelectionToHistory(keyword, finalSlug);
     }
   } catch (error) {
@@ -317,16 +317,32 @@ const printArmorSelection = (results) => {
 };
 
 //Mikey
-// Save keyword to search_history_keyword.json
-const saveKeywordToHistory = async (keyword) => {
-  // Check if the keyword already exists
-  const existingKeywords = await find("search_history_keyword", { keyword });
+// Save keyword and searchTerm to search_history_keyword.json
+const saveKeywordToHistory = async (keyword, searchTerm = "") => {
+  try {
+    const history = await find("search_history_keyword");
 
-  if (existingKeywords.length === 0) {
-    // inserts new key words
-    await insert("search_history_keyword", { keyword });
+    // Find existing keyword entry
+    const entry = history.find((item) => item.keyword === keyword);
+
+    if (!entry) {
+      // No entry for this keyword yet
+      await insert("search_history_keyword", {
+        keyword,
+        searchTerms: searchTerm ? [searchTerm] : []
+      });
+    } else if (searchTerm && (!entry.searchTerms || !entry.searchTerms.includes(searchTerm))) {
+      // If the keyword exists, but searchTerm is new, just insert a new object
+      await insert("search_history_keyword", {
+        keyword,
+        searchTerms: [searchTerm]
+      });
+    }
+  } catch (error) {
+    console.error("Error saving keyword to history:", error);
   }
 };
+
 
 //Mikey
 // Save item to search_history_selection.json
@@ -354,19 +370,39 @@ export const showKeywordHistory = async () => {
       return;
     }
 
-    const selectedKeyword = await select({
-      message: "Select a keyword from history to search again:",
+    // Flatten each keyword + searchTerm into individual selectable options
+    const flattenedChoices = history.flatMap((entry) => {
+      if (!entry.searchTerms || entry.searchTerms.length === 0) {
+        return [{
+          name: `search ${entry.keyword}`,
+          value: { keyword: entry.keyword, searchTerm: "" }
+        }];
+      }
+
+      return entry.searchTerms.map((term) => ({
+        name: `search ${entry.keyword} "${term}"`,
+        value: { keyword: entry.keyword, searchTerm: term }
+      }));
+    });
+
+    const selected = await select({
+      message: "Select a previous search to run again:",
       choices: [
         { name: "Exit", value: null },
-        ...history.map((h) => ({ name: h.keyword, value: h.keyword })),
+        ...flattenedChoices
       ],
     });
 
-    if (selectedKeyword) await searchApiByKeyword(selectedKeyword);
+    if (selected) {
+      await searchApiByKeyword(selected.keyword, selected.searchTerm);
+    }
+
   } catch (error) {
     console.error("Error displaying keyword history:", error);
   }
 };
+
+
 
 //Santiago
 /**

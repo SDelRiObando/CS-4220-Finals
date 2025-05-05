@@ -1,4 +1,4 @@
-import { getDataByKeyword, searchByKeyword, getDataByKeywordAndSlug } from "./api.js";
+import { getDataByKeyword, searchByKeyword, getDataByKeywordAndSlug } from "./services/api.js";
 import { insert, find } from "./db.js";
 import { select } from "@inquirer/prompts";
 

@@ -1,19 +1,16 @@
 {
-  "dependencies": {
-    "@inquirer/prompts": "^7.4.0",
-    "axios": "^1.8.4",
-    "inquirer": "^12.5.0",
-    "yargs": "^17.7.2"
-  },
-  "name": "cs-4220-midterm",
+  "name": "cs-4220-final",
   "version": "1.0.0",
-  "type": "module",
-  "description": "Midterm project for CS4220-01",
-  "main": "cli.js",
+  "description": "CS 4220 Final",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Santiago Del Rio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SDelRiObando/CS-4220-Finals.git"
+  },
+  "author": "Santiago Del Rio Obando",
   "contributors": [
     {
       "name": "Weston Wood"
@@ -31,5 +28,9 @@
       "name": "Micheal Hareu"
     }
   ],
-  "license": "ISC"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SDelRiObando/CS-4220-Finals/issues"
+  },
+  "homepage": "https://github.com/SDelRiObando/CS-4220-Finals#readme"
 }

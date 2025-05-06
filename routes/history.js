@@ -3,7 +3,7 @@ import db from '../services/db.js';
 
 const router = express.Router();
 
-// POST /history?type=keywords or type=selections
+// POST /history gotta implement ?type=keywords or ?type=selections
 router.post('/', async (req, res) => {
     const { type } = req.query;  // Get the 'type' query parameter
     const { keyword, searchTerms, slug } = req.body;  // Get body data
@@ -61,7 +61,6 @@ router.get('/', async (req, res) => {
     try {
       console.log('Fetching history...');
   
-      // Use your custom db.find wrapper, which returns a cursor
       const keywordCursor = await db.find('search_history');
       const selectionCursor = await db.find('search_history_selection');
   

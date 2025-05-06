@@ -24,8 +24,8 @@ router.get('/', async (req, res) => {
 
     // Save only the search term (e.g., "dragons") to the /history route (for keywords)
     const searchHistory = {
-      keyword: "monsters",  // This is fixed as you're searching for monsters
-      searchTerms: [searchTerm],  // Save only the actual search term (e.g., 'dragons')
+      keyword: "monsters",  
+      searchTerms: [searchTerm], 
     };
 
     // Send the search history to the /history endpoint for keywords
@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params; // Get the dynamic 'id' (slug) from the path
-  const keyword = 'monsters';  // Keyword is implicit as 'monsters' in the route
+  const keyword = 'monsters'; 
 
   try {
       // Step 1: Fetch data using the `getDataByKeywordAndSlug` function

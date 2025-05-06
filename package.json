@@ -1,43 +1,47 @@
 {
-  "name": "cs-4220-final",
-  "version": "1.0.0",
-  "description": "CS 4220 Final",
-  "type": "module",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SDelRiObando/CS-4220-Finals.git"
-  },
-  "author": "Santiago Del Rio Obando",
-  "contributors": [
-    {
-      "name": "Weston Wood"
-    },
-    {
-      "name": "Angel I. Gutierrez Sanjuan"
-    },
-    {
-      "name": "Antonio J. Ortega"
-    },
-    {
-      "name": "James San"
-    },
-    {
-      "name": "Micheal Hareu"
-    }
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/SDelRiObando/CS-4220-Finals/issues"
-  },
-  "homepage": "https://github.com/SDelRiObando/CS-4220-Finals#readme",
-  "dependencies": {
-    "axios": "^1.9.0",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "mongodb": "^6.16.0"
-  }
+	"name": "cs-4220-final",
+	"version": "1.0.0",
+	"description": "CS 4220 Final",
+	"type": "module",
+	"main": "server.js",
+	"scripts": {
+		"dev": "npx nodemon server.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SDelRiObando/CS-4220-Finals.git"
+	},
+	"author": "Santiago Del Rio Obando",
+	"contributors": [
+		{
+			"name": "Weston Wood"
+		},
+		{
+			"name": "Angel I. Gutierrez Sanjuan"
+		},
+		{
+			"name": "Antonio J. Ortega"
+		},
+		{
+			"name": "James San"
+		},
+		{
+			"name": "Micheal Hareu"
+		}
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/SDelRiObando/CS-4220-Finals/issues"
+	},
+	"homepage": "https://github.com/SDelRiObando/CS-4220-Finals#readme",
+	"dependencies": {
+		"axios": "^1.9.0",
+		"dotenv": "^16.5.0",
+		"express": "^5.1.0",
+		"mongodb": "^6.16.0"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.9"
+	}
 }

@@ -45,8 +45,9 @@ router.get('/', async (req, res) => {
   }
 });
 
+//Tony
 router.get('/:id', async (req, res) => {
-  const { id } = req.params; // Get the dynamic 'id' (slug) from the path
+  const { id } = req.params; // Get the 'id' (slug) from the path
   const keyword = 'monsters'; 
 
   try {

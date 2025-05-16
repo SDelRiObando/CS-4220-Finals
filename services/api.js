@@ -36,7 +36,7 @@ export const getDataByKeyword = async (keyword, page = 1) => {
   }
 };
 
-// Santi - Search with query string
+// Mikey - Search with query string
 export const searchByKeyword = async (keyword, searchTerm, page = 1) => {
   try {
     if (!endpoints[keyword]) {

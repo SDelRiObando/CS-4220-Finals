@@ -76,7 +76,6 @@ router.get('/:id', async (req, res) => {
           slug: id,
         });
       } catch (historyError) {
-        // Log but don't block main response
         console.error('Failed to save selection history:', historyError.message);
       }
     }

@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongo from './services/db.js';
-import historyRouter from './routes/history.js';  // Renamed for clarity
-import monstersRouter from './routes/monsters.js';  // Import monsters route
+import historyRouter from './routes/history.js';  
+import monstersRouter from './routes/monsters.js'; 
 
 // Load environment variables from .env file
 dotenv.config();
@@ -29,7 +29,7 @@ app.use('/monsters', monstersRouter);  // Use the imported router for monsters
 
 // Define a simple root route
 app.get('/', (req, res) => {
-  res.send('Welcome to the API!');
+  res.send('Welcome to the DND API!');
 });
 
 // Generic error handler (optional but useful)
@@ -38,15 +38,15 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Set the port from environment variable or default to 5000
-const PORT = process.env.PORT || 5000;
+// Set the port to 8080
+const PORT = 8080;
 
 // Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// Graceful shutdown (optional)
+// Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('Shutting down gracefully...');
   await mongo.close();  // Close MongoDB connection before exiting

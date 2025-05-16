@@ -3,7 +3,8 @@ import db from "../services/db.js";
 
 const router = express.Router();
 
-// POST /history gotta implement ?type=keywords or ?type=selections
+// POST 
+//history?type=keywordshistory or  /history?type=selections
 router.post("/", async (req, res) => {
 	const { type } = req.query; // Get the 'type' query parameter
 	const { keyword, searchTerms, slug } = req.body; // Get body data

@@ -77,7 +77,6 @@ const mongo = () => {
                 return cursor;
             } else {
                 const cursor = await collection.find({});
-                console.log('here');
                 return cursor;
             }
         } catch (err) {
